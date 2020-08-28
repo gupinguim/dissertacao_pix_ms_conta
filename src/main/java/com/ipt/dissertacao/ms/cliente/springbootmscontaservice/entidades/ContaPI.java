@@ -24,4 +24,52 @@ public class ContaPI {
 	long idCliente;
 	@Column(name="data_criacao")
 	Date dataCriacao;
+	public DICT getDict() {
+		return dict;
+	}
+	public void setDict(DICT dict) {
+		this.dict = dict;
+	}
+	public List<Movimento> getMovimentos() {
+		return movimentos;
+	}
+	public void setMovimentos(List<Movimento> movimentos) {
+		this.movimentos = movimentos;
+	}
+	public long getId() {
+		return Id;
+	}
+	public void setId(long id) {
+		Id = id;
+	}
+	public double getSaldoTotal() {
+		return saldoTotal;
+	}
+	public void setSaldoTotal(double saldoTotal) {
+		this.saldoTotal = saldoTotal;
+	}
+	public double getSaldoBloqueado() {
+		return saldoBloqueado;
+	}
+	public void setSaldoBloqueado(double saldoBloqueado) {
+		this.saldoBloqueado = saldoBloqueado;
+	}
+	public String getSituacaoConta() {
+		return situacaoConta;
+	}
+	public void setSituacaoConta(String situacaoConta) {
+		this.situacaoConta = situacaoConta;
+	}
+	public long getIdCliente() {
+		return idCliente;
+	}
+	public void setIdCliente(long idCliente) {
+		this.idCliente = idCliente;
+	}
+	public Date getDataCriacao() {
+		return dataCriacao;
+	}
+	public void setDataCriacao(Date dataCriacao) {
+		this.dataCriacao = dataCriacao;
+	}
 }
