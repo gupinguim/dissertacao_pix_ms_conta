@@ -1,0 +1,2 @@
+insert into dict(id,telefone,email,cpf_cnpj,uuid) values (1,'5511993822541','joao@teste.com','12345678909','97aabdbe-e9f2-11ea-adc1-0242ac120002')
+insert into conta_pi(id,saldo_total,saldo_bloqueado,situacao_conta,id_cliente,data_criacao,fk_dict) values (1,5000.00,0.00,'Ativa',1,'2020-08-29',1)
