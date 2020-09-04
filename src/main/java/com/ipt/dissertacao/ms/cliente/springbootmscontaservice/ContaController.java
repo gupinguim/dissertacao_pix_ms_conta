@@ -5,7 +5,7 @@ import java.net.URISyntaxException;
 import java.util.*;
 import com.ipt.dissertacao.ms.cliente.springbootmscontaservice.entidades.*;
 import com.ipt.dissertacao.ms.cliente.springbootmscontaservice.repositorios.*;
-
+import com.ipt.dissertacao.ms.cliente.springbootmscontaservice.business.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -41,6 +41,18 @@ public class ContaController {
 			return new ResponseEntity<List<Movimento>>(HttpStatus.NOT_FOUND);
 
 	}
+	
+	@GetMapping("/contas/{id_conta}/movimentos/{id_movimento}")
+	public ResponseEntity<Movimento> ContaMovimentoRecuperar(@PathVariable long id_conta, @PathVariable long id_movimento) {
+
+		Movimento mov = movimento_repository.findByIdAndIdConta(id_movimento, id_conta);
+		if (mov != null)
+			return new ResponseEntity<Movimento>(mov, HttpStatus.OK);
+		else
+			return new ResponseEntity<Movimento>(HttpStatus.NOT_FOUND);
+
+	}
+	
 
 	@PostMapping("/contas/{id_conta}/movimentos")
 	public ResponseEntity<?> ContaMovimentoRegistrar(@PathVariable long id_conta, @RequestBody Movimento mov) {
@@ -52,13 +64,16 @@ public class ContaController {
 
 			mov.setConta(conta);
 
-			movimento_repository.save(mov);
+			MovimentoActions.Registrar(mov);
 
-			return ResponseEntity
-					.created(new URI(String.format("contas/%d/movimentos/%d", id_conta, mov.getId())))
+			movimento_repository.save(mov);
+			conta_repository.save(conta);
+			
+			return ResponseEntity.created(new URI(String.format("contas/%d/movimentos/%d", id_conta, mov.getId())))
 					.body("Movimento criado");
-		} catch (URISyntaxException e) {
-			return new ResponseEntity<String>("Erro no processamento", HttpStatus.INTERNAL_SERVER_ERROR);
+		} catch (Exception e) {
+			return new ResponseEntity<String>(String.format("Erro no processamento: %s", e.getMessage()),
+					HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 
