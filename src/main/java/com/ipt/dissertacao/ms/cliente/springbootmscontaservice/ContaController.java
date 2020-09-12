@@ -41,9 +41,10 @@ public class ContaController {
 			return new ResponseEntity<List<Movimento>>(HttpStatus.NOT_FOUND);
 
 	}
-	
+
 	@GetMapping("/contas/{id_conta}/movimentos/{id_movimento}")
-	public ResponseEntity<Movimento> ContaMovimentoRecuperar(@PathVariable long id_conta, @PathVariable long id_movimento) {
+	public ResponseEntity<Movimento> ContaMovimentoRecuperar(@PathVariable long id_conta,
+			@PathVariable long id_movimento) {
 
 		Movimento mov = movimento_repository.findByIdAndIdConta(id_movimento, id_conta);
 		if (mov != null)
@@ -52,7 +53,6 @@ public class ContaController {
 			return new ResponseEntity<Movimento>(HttpStatus.NOT_FOUND);
 
 	}
-	
 
 	@PostMapping("/contas/{id_conta}/movimentos")
 	public ResponseEntity<?> ContaMovimentoRegistrar(@PathVariable long id_conta, @RequestBody Movimento mov) {
@@ -66,15 +66,25 @@ public class ContaController {
 
 			MovimentoActions.Registrar(mov);
 
-			movimento_repository.save(mov);
+			Movimento myMov = movimento_repository.save(mov);
 			conta_repository.save(conta);
-			
+
 			return ResponseEntity.created(new URI(String.format("contas/%d/movimentos/%d", id_conta, mov.getId())))
-					.body("Movimento criado");
+					.body(myMov);
 		} catch (Exception e) {
 			return new ResponseEntity<String>(String.format("Erro no processamento: %s", e.getMessage()),
 					HttpStatus.INTERNAL_SERVER_ERROR);
 		}
+	}
+
+	@PostMapping("/contas/buscar")
+	public ResponseEntity<?> ContaBuscarPorDICT(@RequestBody DICT dict){
+		ContaPI conta = conta_repository.findByDict(dict.getTelefone(), dict.getEmail(), dict.getCpfCnpj(), dict.getUuid());
+
+		if (conta != null)
+			return new ResponseEntity<ContaPI>(conta, HttpStatus.OK);
+		else
+			return new ResponseEntity<ContaPI>(HttpStatus.NOT_FOUND);
 	}
 
 }
